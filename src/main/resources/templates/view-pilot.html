@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Add</title>
+		<object th:include="fragments/fragment  :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment  :: js" th:remove="tag"></object>
+	</head>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+	<body>
+		<form>
+		<h2>Data</h2>
+		<h3 th:text="${pilot.licenseNumber}"></h3>
+		<h3 th:text="${pilot.name}"></h3>
+		<h3 th:text="${pilot.flyhour}"></h3>
+		<a th:href="@{'/flight/add/'+ ${pilot.licenseNumber}}">Tambah</a>
+		</form>
+		<form th:action="@{/pilot/update/} + ${pilot.licenseNumber}" method="POST">
+			<button type="submit">Update Pilot</button>
+		</form>
+		
+		
+	<h3 th:if="${pilot.flyhour} >100">Status : Pilot Senior</h3>
+	<h3 th:unless="${pilot.flyhour} >= 100"> Status Pilot Junior</h3>
+		
+ 	<form th:action=@{/flight/delete} th:object="${pilot}" method="POST">
+		<table border="I" class="table">
+			<thead>
+				<th style="text-align: center">No</th>
+				<th style="text-align: center">Flight Number</th>
+				<th style="text-align: center">Origin</th>
+				<th style="text-align: center">Destination</th>
+				<th style="text-align: center">Time</th>
+				<th style="text-align: center">Action</th>
+			</thead>
+			<tbody>	
+				<tr th:each="flight, iterationStatus : ${pilot.pilotFlight}">
+			  		<td th:text="${iterationStatus.count}"></td>
+			        <td th:text="${flight.flightNumber}"></td>
+			        <td th:text="${flight.origin}"></td>
+			        <td th:text="${flight.destination}"></td>
+			        <td th:text="${flight.time}"></td>
+			        <td>
+			        	<input type="checkbox" th:filed="${pilot.pilotFlight}" th:value="${flight.flightNumber}"/>
+			        	<label th:for="${#ids.seq('pilot.pilotFlight')}">Hapus</label>
+			        </td>
+	 			</tr>
+		</table>
+		<button type="submit">Delete Selected Flight</button>
+		</form> 
+	</body>
+</html>
